@@ -4,17 +4,21 @@ import { fetchAllUser } from "./services/UserService";
 import ReactPaginate from "react-paginate";
 import ModalAddNew from "./ModalAddNew";
 import ModalEditUser from "./ModalEditUser";
-import { deleteUser } from "./services/UserService";
+import ModalDeleteUser from "./ModalDeleteUser";
+import Addusers from "./Addusers";
+import "./TableUser.scss";
+const _ = require("lodash");
 
-export default function TableUser({
-  setAddNew,
-  isAddNew,
-  isEditNew,
-  setEditNew,
-}) {
+export default function TableUser() {
+  const [isEditNew, setEditNew] = useState(false);
+  const [isDeleteNew, setsDeleteNew] = useState(false);
+  const [isAddNew, setAddNew] = useState(false);
   const [listuser, setListuser] = useState([]);
   const [totalpage, setTotalpage] = useState(0);
   const [datauser, setDatauser] = useState({});
+  const [datauserdelete, setDatauserdelete] = useState({});
+  const [sortBy, setSortBy] = useState("asc");
+  const [sortField, setField] = useState("id");
   useEffect(() => {
     getUser(1);
   }, []);
@@ -36,16 +40,45 @@ export default function TableUser({
     setEditNew(true);
   };
   const handleDeleteUser = (item) => {
-    let newlistuser = listuser.filter((user) => user.id !== item.id);
+    setsDeleteNew(true);
+    setDatauserdelete(item);
+  };
+  //chinh sua nguoi dung
+  const handleEditUserFromModal = (user) => {
+    let newlistuser = _.cloneDeep(listuser);
+    let index = listuser.findIndex((item) => item.id === user.id);
+    newlistuser[index].first_name = user.first_name;
+    setListuser(newlistuser);
+  };
+  //xoa nguoi dung
+  const handleConfirmUserModal = (user) => {
+    let newlistuser = _.cloneDeep(listuser);
+    newlistuser = listuser.filter((item) => item.id !== user.id);
+    setListuser(newlistuser);
+  };
+  //sap xep listuser
+  const handleSort = (sortby, sortfield) => {
+    setSortBy(sortby);
+    setField(sortfield);
+    let newlistuser = _.cloneDeep(listuser);
+    newlistuser = _.orderBy(newlistuser, [sortfield], [sortby]);
     setListuser(newlistuser);
   };
 
-  const handleEditUserFromModal = (user) => {
-    let clonelistuser = [...listuser];
-    let index = listuser.findIndex((item) => item.id === user.id);
-    clonelistuser[index].first_name = user.first_name;
-    setListuser(clonelistuser);
-  };
+  //su dung ham debounce de tri hoan viec thuc thi ham khoang 1s trach duoc viec goi api qua nhieu lan
+  // moi khi nguoi dung chua dien du thong tin tim kiem vao o input
+  const handleSearch = _.debounce((event) => {
+    let term = event.target.value;
+    // console.log(term);
+    if (term) {
+      let newlistuser = _.cloneDeep(listuser);
+      //loc các phần tử của trường email bằng giá trị trong ô input
+      newlistuser = newlistuser.filter((item) => item.email.includes(term));
+      setListuser(newlistuser);
+    } else {
+      getUser(1);
+    }
+  }, 500);
   return (
     <>
       <div>
@@ -61,14 +94,58 @@ export default function TableUser({
           setDatauser={setDatauser}
           handleEditUserFromModal={handleEditUserFromModal}
         />
+        <ModalDeleteUser
+          handleClose={() => setsDeleteNew(false)}
+          show={isDeleteNew}
+          datauserdelete={datauserdelete}
+          handleConfirmUserModal={handleConfirmUserModal}
+        />
 
+        <Addusers
+          setAddNew={setAddNew}
+          listuser={listuser}
+          setListuser={setListuser}
+        />
+        <div className="col-4 my-3">
+          <input
+            className="form-control"
+            placeholder="Search by email..."
+            onChange={(event) => handleSearch(event)}
+          />
+        </div>
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th>Id</th>
+              <th className="td-sort-header">
+                <span>ID</span>
+                <span>
+                  <i
+                    className="fa-solid fa-arrow-down"
+                    onClick={() => handleSort("desc", "id")}
+                  ></i>
+                  <i
+                    className="fa-solid fa-arrow-up"
+                    onClick={() => handleSort("asc", "id")}
+                  ></i>
+                </span>
+              </th>
+
               <th>Email</th>
-              <th>First_name</th>
+              <th className="td-sort-header">
+                <span>First_name</span>
+                <span>
+                  <i
+                    className="fa-solid fa-arrow-down"
+                    onClick={() => handleSort("desc", "first_name")}
+                  ></i>
+                  <i
+                    className="fa-solid fa-arrow-up"
+                    onClick={() => handleSort("asc", "first_name")}
+                  ></i>
+                </span>
+              </th>
               <th>Last_name</th>
+
               <th>Active</th>
             </tr>
           </thead>

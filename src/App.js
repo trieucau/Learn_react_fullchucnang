@@ -2,26 +2,31 @@ import "./App.scss";
 import Header from "./components/Header";
 import TableUser from "./components/TableUser";
 import Container from "react-bootstrap/Container";
-import { useState } from "react";
-import Addusers from "./components/Addusers";
 import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Home from "./components/Home";
+import { Routes, Route, Link } from "react-router-dom";
+import Login from "./components/Login";
+import { useContext, useEffect } from "react";
+import { UserContext } from "./managecontext/UserContext";
 
 function App() {
-  const [isAddNew, setAddNew] = useState(false);
-  const [isEditNew, setEditNew] = useState(false);
+  const { user, login } = useContext(UserContext);
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      login(localStorage.getItem("email"), localStorage.getItem("token"));
+    }
+  }, []);
   return (
     <>
       <div className="app-container">
         <Header />
         <Container>
-          <Addusers setAddNew={setAddNew} />
-          <TableUser
-            setAddNew={setAddNew}
-            isAddNew={isAddNew}
-            isEditNew={isEditNew}
-            setEditNew={setEditNew}
-          />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/users" element={<TableUser />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
         </Container>
       </div>
       <ToastContainer

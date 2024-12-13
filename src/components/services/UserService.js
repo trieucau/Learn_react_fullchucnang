@@ -11,7 +11,11 @@ const putUpdataUser = (n, j) => {
   return instance.put("/api/users/2", { name: n, job: j });
 };
 
-const deleteUser = (n, j) => {
-  return instance.delete("/api/users/2", { name: n, job: j });
+const deleteUser = (id) => {
+  return instance.delete(`/api/users/${id}`);
 };
-export { fetchAllUser, postCreateUser, putUpdataUser, deleteUser };
+
+const loginAPI = (e, p) => {
+  return instance.post("/api/login", { email: e, password: p });
+};
+export { fetchAllUser, postCreateUser, putUpdataUser, deleteUser, loginAPI };
