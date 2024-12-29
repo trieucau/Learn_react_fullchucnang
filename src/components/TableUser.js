@@ -106,80 +106,82 @@ export default function TableUser() {
           listuser={listuser}
           setListuser={setListuser}
         />
-        <div className="col-4 my-3">
+        <div className="col-12 col-sm-4 my-3">
           <input
             className="form-control"
             placeholder="Search by email..."
             onChange={(event) => handleSearch(event)}
           />
         </div>
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th className="td-sort-header">
-                <span>ID</span>
-                <span>
-                  <i
-                    className="fa-solid fa-arrow-down"
-                    onClick={() => handleSort("desc", "id")}
-                  ></i>
-                  <i
-                    className="fa-solid fa-arrow-up"
-                    onClick={() => handleSort("asc", "id")}
-                  ></i>
-                </span>
-              </th>
+        <div className="custom-table">
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th className="td-sort-header">
+                  <span>ID</span>
+                  <span>
+                    <i
+                      className="fa-solid fa-arrow-down"
+                      onClick={() => handleSort("desc", "id")}
+                    ></i>
+                    <i
+                      className="fa-solid fa-arrow-up"
+                      onClick={() => handleSort("asc", "id")}
+                    ></i>
+                  </span>
+                </th>
 
-              <th>Email</th>
-              <th className="td-sort-header">
-                <span>First_name</span>
-                <span>
-                  <i
-                    className="fa-solid fa-arrow-down"
-                    onClick={() => handleSort("desc", "first_name")}
-                  ></i>
-                  <i
-                    className="fa-solid fa-arrow-up"
-                    onClick={() => handleSort("asc", "first_name")}
-                  ></i>
-                </span>
-              </th>
-              <th>Last_name</th>
+                <th>Email</th>
+                <th className="td-sort-header">
+                  <span>First_name</span>
+                  <span>
+                    <i
+                      className="fa-solid fa-arrow-down"
+                      onClick={() => handleSort("desc", "first_name")}
+                    ></i>
+                    <i
+                      className="fa-solid fa-arrow-up"
+                      onClick={() => handleSort("asc", "first_name")}
+                    ></i>
+                  </span>
+                </th>
+                <th>Last_name</th>
 
-              <th>Active</th>
-            </tr>
-          </thead>
-          <tbody>
-            {listuser &&
-              listuser.length > 0 &&
-              listuser.map((item, index) => {
-                return (
-                  <tr key={`user - ${index}`}>
-                    <td>{item.id}</td>
-                    <td>{item.email}</td>
-                    <td>{item.first_name}</td>
-                    <td>{item.last_name}</td>
-                    <th>
-                      <button
-                        type="button"
-                        className="btn btn-warning mx-2"
-                        onClick={() => handleEditUser(item)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-danger"
-                        onClick={() => handleDeleteUser(item)}
-                      >
-                        Delete
-                      </button>
-                    </th>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </Table>
+                <th>Active</th>
+              </tr>
+            </thead>
+            <tbody>
+              {listuser &&
+                listuser.length > 0 &&
+                listuser.map((item, index) => {
+                  return (
+                    <tr key={`user - ${index}`}>
+                      <td>{item.id}</td>
+                      <td>{item.email}</td>
+                      <td>{item.first_name}</td>
+                      <td>{item.last_name}</td>
+                      <th>
+                        <button
+                          type="button"
+                          className="btn btn-warning mx-2"
+                          onClick={() => handleEditUser(item)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-danger"
+                          onClick={() => handleDeleteUser(item)}
+                        >
+                          Delete
+                        </button>
+                      </th>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </Table>
+        </div>
         <ReactPaginate
           breakLabel="..."
           nextLabel="next >"

@@ -100,9 +100,9 @@ export default function Addusers({ setAddNew, listuser, setListuser }) {
 
   return (
     <>
-      <div className=" my-3 d-flex justify-content-between  align-items-center">
+      <div className=" my-3 d-sm-flex justify-content-between  align-items-center">
         <span>ListUser:</span>
-        <div className="group-btns">
+        <div className="group-btns mt-2 mt-sm-0">
           <label htmlFor="test" className="btn btn-warning  p-2">
             <i className="fa-solid fa-file-import"></i> Import
           </label>

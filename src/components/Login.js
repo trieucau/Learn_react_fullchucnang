@@ -47,7 +47,7 @@ export default function Login() {
       return;
     }
     setLoadloginAPI(true);
-    let res = await loginAPI(email, pass);
+    let res = await loginAPI(email.trim(), pass);
     if (res && res.token) {
       login(email, res.token);
       success("Đăng nhập thành công!");
@@ -59,12 +59,17 @@ export default function Login() {
     }
     setLoadloginAPI(false);
   };
+  const handleKeyDown = (event) => {
+    if (event && event.key === "Enter") {
+      handleLogintoAPI();
+    }
+  };
 
   return (
     <>
       <div className="login-container col-12 col-sm-6 col-md-4  ">
         <div className="title">Log in</div>
-        <div className="text">Email or username</div>
+        <div className="text">Email or username (janet.weaver@reqres.in)</div>
         <input
           type="text"
           placeholder="Email or Username"
@@ -77,6 +82,7 @@ export default function Login() {
             placeholder="Password"
             value={pass}
             onChange={(event) => setPass(event.target.value)}
+            onKeyDown={(event) => handleKeyDown(event)}
           />
           <i
             className={

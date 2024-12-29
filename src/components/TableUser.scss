@@ -6,3 +6,11 @@ th.td-sort-header {
     cursor: pointer;
   }
 }
+
+.custom-table {
+  width: inherit;
+  overflow-x: auto;
+}
+.pagination {
+  justify-content: center;
+}

@@ -1,16 +1,17 @@
 import "./App.scss";
 import Header from "./components/Header";
-import TableUser from "./components/TableUser";
+
 import Container from "react-bootstrap/Container";
 import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Home from "./components/Home";
-import { Routes, Route, Link } from "react-router-dom";
-import Login from "./components/Login";
 import { useContext, useEffect } from "react";
 import { UserContext } from "./managecontext/UserContext";
-
+import AppRoutes from "./routers/AppRoutes";
+import { useSelector } from "react-redux";
 function App() {
+  //su dung redux quan li state user trong stote
+  const datauserRedux = useSelector((state) => state.user.account);
+  console.log(datauserRedux);
   const { user, login } = useContext(UserContext);
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -22,11 +23,7 @@ function App() {
       <div className="app-container">
         <Header />
         <Container>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/users" element={<TableUser />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
+          <AppRoutes />
         </Container>
       </div>
       <ToastContainer
